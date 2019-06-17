@@ -15,6 +15,7 @@ type pushOpts struct {
 	config              *ocispec.Descriptor
 	configMediaType     string
 	configAnnotations   map[string]string
+	manifestDocker      bool
 	manifestAnnotations map[string]string
 	validateName        func(desc ocispec.Descriptor) error
 	baseHandlers        []images.Handler
@@ -28,6 +29,12 @@ func pushOptsDefaults() *pushOpts {
 
 // PushOpt allows callers to set options on the oras push
 type PushOpt func(o *pushOpts) error
+
+// WithDockerManifest optimizes the manifests for docker
+func WithDockerManifest(o *pushOpts) error {
+	o.manifestDocker = true
+	return nil
+}
 
 // WithConfig overrides the config
 func WithConfig(config ocispec.Descriptor) PushOpt {

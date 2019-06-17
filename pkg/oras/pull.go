@@ -79,7 +79,10 @@ func fetchContent(ctx context.Context, fetcher remotes.Fetcher, desc ocispec.Des
 func filterHandler(allowedMediaTypes ...string) images.HandlerFunc {
 	return func(ctx context.Context, desc ocispec.Descriptor) ([]ocispec.Descriptor, error) {
 		switch {
-		case isAllowedMediaType(desc.MediaType, ocispec.MediaTypeImageManifest, ocispec.MediaTypeImageIndex):
+		case isAllowedMediaType(desc.MediaType,
+			ocispec.MediaTypeImageManifest, ocispec.MediaTypeImageIndex,
+			images.MediaTypeDockerSchema2Manifest, images.MediaTypeDockerSchema2ManifestList,
+		):
 			return nil, nil
 		case isAllowedMediaType(desc.MediaType, allowedMediaTypes...):
 			if name, ok := orascontent.ResolveName(desc); ok && len(name) > 0 {

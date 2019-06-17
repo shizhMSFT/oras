@@ -26,6 +26,7 @@ const (
 type pushOptions struct {
 	targetRef              string
 	fileRefs               []string
+	manifestDocker         bool
 	manifestConfigRef      string
 	manifestAnnotations    string
 	pathValidationDisabled bool
@@ -64,6 +65,7 @@ Example - Push file "hi.txt" with the custom manifest config "config.json" of th
 		},
 	}
 
+	cmd.Flags().BoolVarP(&opts.manifestDocker, "manifest-docker", "", false, "use docker manifest")
 	cmd.Flags().StringVarP(&opts.manifestConfigRef, "manifest-config", "", "", "manifest config file")
 	cmd.Flags().StringVarP(&opts.manifestAnnotations, "manifest-annotations", "", "", "manifest annotation file")
 	cmd.Flags().BoolVarP(&opts.pathValidationDisabled, "disable-path-validation", "", false, "skip path validation")
@@ -90,6 +92,9 @@ func runPush(opts pushOptions) error {
 		pushOpts    []oras.PushOpt
 	)
 	defer store.Close()
+	if opts.manifestDocker {
+		pushOpts = append(pushOpts, oras.WithDockerManifest)
+	}
 	if opts.manifestAnnotations != "" {
 		if err := decodeJSON(opts.manifestAnnotations, &annotations); err != nil {
 			return err

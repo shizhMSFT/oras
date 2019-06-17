@@ -6,6 +6,7 @@ import (
 	orascontent "github.com/deislabs/oras/pkg/content"
 
 	"github.com/containerd/containerd/content"
+	"github.com/containerd/containerd/images"
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
 )
 
@@ -60,7 +61,10 @@ func (s *hybridStore) Writer(ctx context.Context, opts ...content.WriterOpt) (co
 		}
 	}
 
-	if isAllowedMediaType(wOpts.Desc.MediaType, ocispec.MediaTypeImageManifest, ocispec.MediaTypeImageIndex) || s.ingester == nil {
+	if isAllowedMediaType(wOpts.Desc.MediaType,
+		ocispec.MediaTypeImageManifest, ocispec.MediaTypeImageIndex,
+		images.MediaTypeDockerSchema2Manifest, images.MediaTypeDockerSchema2ManifestList,
+	) || s.ingester == nil {
 		return s.cache.Writer(ctx, opts...)
 	}
 	return s.ingester.Writer(ctx, opts...)
