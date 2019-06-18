@@ -1,3 +1,6 @@
+# Announcement
+This project has been donated and moved to Deis Labs at https://github.com/deislabs/oras on behalf of Microsoft Corperation.
+
 # OCI Registry As Storage
 [![Codefresh build status]( https://g.codefresh.io/api/badges/pipeline/orasbot/deislabs%2Foras%2Fmaster?type=cf-1)]( https://g.codefresh.io/public/accounts/orasbot/pipelines/deislabs/oras/master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/deislabs/oras)](https://goreportcard.com/report/github.com/deislabs/oras)
