@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package main
+package root
 
 import (
 	"context"
@@ -51,10 +51,10 @@ func copyCmd() *cobra.Command {
 Example - Copy an artifact between registries:
   oras cp localhost:5000/net-monitor:v1 localhost:6000/net-monitor-copy:v1
 
-Example - Download an artifact into an OCI layout folder:
+Example - Download an artifact into an OCI image layout folder:
   oras cp --to-oci-layout localhost:5000/net-monitor:v1 ./downloaded:v1
 
-Example - Upload an artifact from an OCI layout folder:
+Example - Upload an artifact from an OCI image layout folder:
   oras cp --from-oci-layout ./to-upload:v1 localhost:5000/net-monitor:v1
 
 Example - Upload an artifact from an OCI layout tar archive:
@@ -85,7 +85,7 @@ Example - Copy an artifact with multiple tags with concurrency tuned:
 			return option.Parse(&opts)
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return runCopy(opts)
+			return runCopy(cmd.Context(), opts)
 		},
 	}
 	cmd.Flags().BoolVarP(&opts.recursive, "recursive", "r", false, "[Preview] recursively copy the artifact and its referrer artifacts")
@@ -95,8 +95,8 @@ Example - Copy an artifact with multiple tags with concurrency tuned:
 	return cmd
 }
 
-func runCopy(opts copyOptions) error {
-	ctx, _ := opts.SetLoggerLevel()
+func runCopy(ctx context.Context, opts copyOptions) error {
+	ctx, _ = opts.WithContext(ctx)
 
 	// Prepare source
 	src, err := opts.From.NewReadonlyTarget(ctx, opts.Common)

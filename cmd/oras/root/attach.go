@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package main
+package root
 
 import (
 	"context"
@@ -72,7 +72,7 @@ Example - Attach file 'hi.txt' and add manifest annotations:
 Example - Attach file 'hi.txt' and export the pushed manifest to 'manifest.json':
   oras attach --artifact-type doc/example --export-manifest manifest.json localhost:5000/hello:v1 hi.txt
 
-Example - Attach file to the manifest tagged 'v1' in an OCI layout folder 'layout-dir':
+Example - Attach file to the manifest tagged 'v1' in an OCI image layout folder 'layout-dir':
   oras attach --oci-layout --artifact-type doc/example layout-dir:v1 hi.txt
   `,
 		Args: cobra.MinimumNArgs(1),
@@ -85,20 +85,20 @@ Example - Attach file to the manifest tagged 'v1' in an OCI layout folder 'layou
 			return nil
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return runAttach(opts)
+			return runAttach(cmd.Context(), opts)
 		},
 	}
 
 	cmd.Flags().StringVarP(&opts.artifactType, "artifact-type", "", "", "artifact type")
 	cmd.Flags().IntVarP(&opts.concurrency, "concurrency", "", 5, "concurrency level")
-	cmd.MarkFlagRequired("artifact-type")
+	_ = cmd.MarkFlagRequired("artifact-type")
 	opts.EnableDistributionSpecFlag()
 	option.ApplyFlags(&opts, cmd.Flags())
 	return cmd
 }
 
-func runAttach(opts attachOptions) error {
-	ctx, _ := opts.SetLoggerLevel()
+func runAttach(ctx context.Context, opts attachOptions) error {
+	ctx, _ = opts.WithContext(ctx)
 	annotations, err := opts.LoadManifestAnnotations()
 	if err != nil {
 		return err
@@ -113,7 +113,6 @@ func runAttach(opts attachOptions) error {
 		return err
 	}
 	defer store.Close()
-	store.AllowPathTraversalOnWrite = opts.PathValidationDisabled
 
 	dst, err := opts.NewTarget(opts.Common)
 	if err != nil {
