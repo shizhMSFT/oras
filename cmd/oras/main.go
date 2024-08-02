@@ -21,6 +21,8 @@ import (
 	"os/signal"
 
 	"oras.land/oras/cmd/oras/root"
+
+	_ "github.com/opencontainers/go-digest/blake3"
 )
 
 func main() {

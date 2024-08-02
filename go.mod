@@ -7,6 +7,7 @@ require (
 	github.com/containerd/console v1.0.4
 	github.com/morikuni/aec v1.0.0
 	github.com/opencontainers/go-digest v1.0.0
+	github.com/opencontainers/go-digest/blake3 v0.0.0-20240426182413-22b78e47854a
 	github.com/opencontainers/image-spec v1.1.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.8.1
@@ -24,10 +25,14 @@ require (
 	github.com/huandu/xstrings v1.4.0 // indirect
 	github.com/imdario/mergo v0.3.16 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
+	github.com/klauspost/cpuid/v2 v2.2.5 // indirect
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
 	github.com/shopspring/decimal v1.3.1 // indirect
 	github.com/spf13/cast v1.6.0 // indirect
+	github.com/zeebo/blake3 v0.2.3 // indirect
 	golang.org/x/crypto v0.18.0 // indirect
 	golang.org/x/sys v0.22.0 // indirect
 )
+
+replace github.com/opencontainers/go-digest => github.com/shizhMSFT/go-digest v0.0.0-20240802064820-0b45d413e5b4
